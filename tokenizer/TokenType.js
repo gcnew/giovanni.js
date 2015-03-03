@@ -1,9 +1,6 @@
-var TokenType = [
+var TokenType = Util.asIdMap([
 	'SYMBOL',
 	'LITERAL',
 	'IDENTIFIER',
 	'INT'
-].reduce(function(aAcc, aValue) {
-	aAcc[aValue] = aValue;
-	return aAcc;
-}, {});
+]);
