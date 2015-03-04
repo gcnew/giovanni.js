@@ -1,17 +1,9 @@
 function GrammarParser() {
-	var self = this;
-
-	construct.apply(this, arguments);
-
 	var mToken;
 	var mAttrs = {};
 	var mExpectedAttrs = GrammarParser.RULE_ATTRIBUTES;
 
-	var mTokenizer;
-
-	function construct(aSource) {
-		mTokenizer = new Tokenizer(aSource);
-	}
+	var mTokenizer = new Tokenizer(aSource);
 
 	function parse() {
 		advance();
