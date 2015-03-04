@@ -83,7 +83,7 @@ function GrammarParser() {
 		// TODO: should we disallow attributes only sequences?
 		/* if (!nodes.length) {
 			parseRepetition(); // i.e. crash
-			AssertUtil.never();
+			throw new Error('never');
 		} */
 
 		attrs = consumeAttributes();
@@ -305,9 +305,9 @@ function GrammarParser() {
 
 	function msg(/* aMessage, ..aArgs*/) {
 		var position = mToken ? mToken.position : '<end>';
-		var message = Strings.format.apply(null, arguments);
+		var message = Util.format.apply(null, arguments);
 
-		return Strings.format('{}: {}', position, message);
+		return Util.format('{}: {}', position, message);
 	}
 
 	function error(/* aMessage, ..aArgs*/) {

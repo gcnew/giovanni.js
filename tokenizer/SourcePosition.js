@@ -5,6 +5,6 @@ function SourcePosition(aStart, aEnd, aLine, aChar) {
 	this.char = aChar;
 }
 
-SourcePosition.toString = function() {
+SourcePosition.prototype.toString = function() {
 	return this.line + ':' + this.char;
 };

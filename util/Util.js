@@ -35,4 +35,17 @@ var Util = new function() {
 
 	self.noop = function() {
 	};
+
+	self.asStatic = Function.prototype.bind.bind(Function.prototype.call);
+
+	self.slice = Array.slice || self.asStatic(Array.prototype.slice);
+
+	self.format = function(aFormat) {
+		var index = 0;
+		var args = self.slice(arguments, 1);
+
+		return aFormat.replace(/\{(\d*)\}/g, function(_, aIndex) {
+			return args[aIndex ? (aIndex | 0) : index++];
+		});
+	};
 };

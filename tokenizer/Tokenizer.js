@@ -211,9 +211,9 @@ function Tokenizer() {
 	}
 
 	function msg(/*aMessage , ..aArgs */) {
-		var message = Strings.format.apply(null, arguments);
+		var message = Util.format.apply(null, arguments);
 
-		return Strings.format("{}:{} {}", mTokenLine, mTokenChar, message);
+		return Util.format("{}:{} {}", mTokenLine, mTokenChar, message);
 	}
 
 	function error(aMessage/*, ..aArgs*/) {
