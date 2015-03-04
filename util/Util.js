@@ -32,4 +32,7 @@ var Util = new function() {
 			}
 		}
 	};
+
+	self.noop = function() {
+	};
 };

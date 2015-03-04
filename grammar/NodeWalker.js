@@ -1,0 +1,43 @@
+function NodeWalker(aVisitor) {
+	this.cache = {};
+
+	this.visitor = aVisitor;
+};
+
+NodeWalker.traverse = function(aNode, aVisitor) {
+	new NodeWalker(aVisitor).traverse(aNode);
+
+	return aVisitor;
+};
+
+NodeWalker.prototype.visitChild = function(aChild) {
+	if (aChild.length) {
+		aChild.forEach(this.traverse, this);
+	} else {
+		traverse(aChild);
+	}
+};
+
+NodeWalker.prototype.traverse = function(aNode) {
+	var handles = this.handles(aNode.type);
+
+	handles.visit.call(this.visitor, aNode);
+	aNode.children.forEach(this.visitChild, this);
+
+	handles.leave.call(this.visitor, aNode);
+};
+
+NodeWalker.prototype.handles = function(aType) {
+	var handles = this.cache[aType];
+
+	if (!handles) {
+		handles = {
+			visit: this.visitor['visit' + aType] || Util.noop,
+			leave: this.visitor['leave' + aType] || Util.noop
+		};
+
+		cache[aType] = handles;
+	}
+
+	return handles;
+};
