@@ -7,19 +7,11 @@ function Node(aType, aAttributes, aChildren) {
 }
 
 Node.prototype.getChild = function(aName) {
-	return Util.find(this.children, function(aValue, aKey) {
-		if (aKey === aName) {
-			return aValue;
-		}
-	});
+	return this.children[aName];
 };
 
 Node.prototype.getAttribute = function(aName) {
-	return Util.find(this.attributes, function(aValue, aKey) {
-		if (aKey === aName) {
-			return aValue;
-		}
-	});
+	return this.attributes[aName];
 };
 
 Node.prototype.setAttribute = function(aName, aValue) {

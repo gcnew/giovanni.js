@@ -23,16 +23,6 @@ var Util = new function() {
 		});
 	};
 
-	self.find = function(aObject, aFunction) {
-		for (var k in aObject) {
-			var val = aFunction(k, aObject[k]);
-
-			if (typeof(val) !== 'undefined') {
-				return val;
-			}
-		}
-	};
-
 	self.noop = function() {
 	};
 
