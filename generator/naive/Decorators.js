@@ -14,9 +14,15 @@ var Decorators = (function() {
 
 			if (val.type === 'child') {
 				children[val.name] = val.value;	
-			} else {
-				Util.extend(attributes, val.value);
+				continue;
 			}
+
+			if (val.type === 'attributes') {
+				Util.extend(attributes, val.value);
+				continue;
+			}
+
+			Util.never();
 		}
 
 		return {
