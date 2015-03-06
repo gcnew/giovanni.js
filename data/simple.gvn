@@ -1,0 +1,9 @@
+s: ' ' | '	';
+
+int: s* (%value [0-9]+) s*;
+
+#start add: (%left int) (%operator '+') (%right int)
+	| #nobox int;
+
+// #compound | #clean
+multiply: (%left int) ((%operator '*') (%right int))?;

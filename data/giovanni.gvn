@@ -1,0 +1,31 @@
+start: Grammar;
+
+Grammar: Rule+;
+
+Identifier: [a-z_][a-z0-9_]*;
+
+Rule: Identifier ':' Alternation ';';
+
+Alternation: Sequence '|' Alternation
+	| Sequence;
+
+Sequence: Repetition Sequence
+	| Repetition;
+
+Repetition: Primary ('*'|'+'|'?')
+	| Primary;
+
+Literal: '\'' ( '\\\'' | '\\\\' | [^\\'] )* '\'';
+
+Any: '.';
+
+NameDecorator: '(' '#' Identifier Alternation ')';
+
+CharClass: '[' '^'? ((. '-' .) | .)+ ']';
+
+Primary: Literal
+	| Identifier
+	| Any
+	| CharClass
+	| NameDecorator
+	| '(' Alternation ')';
