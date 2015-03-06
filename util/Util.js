@@ -23,6 +23,18 @@ var Util = new function() {
 		});
 	};
 
+	self.extend = function(aObject /*, ..args */) {
+		var args = self.slice(arguments);
+
+		args.forEach(function(aValue) {
+			for (var k in aValue) {
+				aObject[k] = aValue[k];
+			}
+		});
+
+		return aObject;
+	};
+
 	self.noop = function() {
 	};
 
@@ -37,5 +49,11 @@ var Util = new function() {
 		return aFormat.replace(/\{(\d*)\}/g, function(_, aIndex) {
 			return args[aIndex ? (aIndex | 0) : index++];
 		});
+	};
+
+	self.assert = function(aCondition, aMessage) {
+		if (!aCondition) {
+			throw new Error(aMessage);
+		}
 	};
 };

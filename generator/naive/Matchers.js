@@ -3,26 +3,6 @@ var Matchers = (function() {
 		return true;
 	});
 
-	function matcher(aMatcher) {
-		return {
-			match: aMatcher
-		};
-	}
-
-	function terminal(aMatcher) {
-		return {
-			terminal: true,
-			matcher: aMatcher
-		};
-	}
-
-	function chain(aMatcher) {
-		return {
-			next: MATCHER_TRUE,
-			match: aMatcher
-		};
-	}
-
 	function isInRange(aChar, aRanges) {
 		for (var i = 0; i < aRanges.length; ++i) {
 			var range = aRanges[i];
@@ -40,8 +20,28 @@ var Matchers = (function() {
 	}
 
 	return {
+		matcher: function(aMatcher) {
+			return {
+				match: aMatcher
+			};
+		},
+
+		terminal: function(aMatcher) {
+			return {
+				terminal: true,
+				match: aMatcher
+			};
+		},
+
+		chain: function(aMatcher) {
+			return {
+				next: MATCHER_TRUE,
+				match: aMatcher
+			};
+		},
+
 		alternation: function(aFirst, aSecond) {
-			return chain(function(aState) {
+			return Matchers.chain(function(aState) {
 				var offset = aState.offset;
 
 				if (aFirst.match(aState)) {
@@ -65,7 +65,7 @@ var Matchers = (function() {
 		},
 
 		any: function() {
-			return terminal(function(aState) {
+			return Matchers.terminal(function(aState) {
 				if (aState.isAtEnd()) {
 					return false;
 				}
@@ -76,7 +76,7 @@ var Matchers = (function() {
 		},
 
 		charClass: function(aInvert, aChars, aRanges) {
-			return terminal(function(aState) {
+			return Matchers.terminal(function(aState) {
 				if (aState.isAtEnd()) {
 					return false;
 				}
@@ -95,7 +95,7 @@ var Matchers = (function() {
 		},
 
 		literal: function(aLiteral) {
-			return terminal(function(aState) {
+			return Matchers.terminal(function(aState) {
 				if (aState.source.indexOf(aLiteral, aState.offset) < 0) {
 					return false;
 				}
@@ -106,7 +106,7 @@ var Matchers = (function() {
 		},
 
 		repetition: function(aMin, aMax, aMatcher) {
-			return chain(function(aState) {
+			return Matchers.chain(function(aState) {
 				var matches = 0;
 				var maxMatches = aMax;
 				var offset = aState.offset;
@@ -153,7 +153,7 @@ var Matchers = (function() {
 		},
 
 		sequence: function(aFirst, aSecond) {
-			return matcher(function(aState) {
+			return Matchers.matcher(function(aState) {
 				var offset = aState.offset;
 
 				if (!(aFirst.match(aState) && aSecond.match(aState))) {
