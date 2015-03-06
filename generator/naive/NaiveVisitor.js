@@ -107,7 +107,7 @@ Util.extend(NaiveVisitor.prototype, {
 			'?': { min: 0, max:  1 }
 		}[operator];
 
-		Util.assert(bounds, 'Unexpected operator: ' + operator);
+		Util.assertf(bounds, 'Unexpected operator: {}', operator);
 
 		this.stack.push(Matchers.repetition(
 			bounds.min,

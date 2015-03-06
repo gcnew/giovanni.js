@@ -56,4 +56,14 @@ var Util = new function() {
 			throw new Error(aMessage);
 		}
 	};
+
+	self.assertf = function(aCondition) {
+		if (!aCondition) {
+			self.assert(false, self.format.apply(null, arguments));
+		}
+	};
+
+	self.never = function(aMessage) {
+		self.assert(false, aMessage);
+	};
 };
