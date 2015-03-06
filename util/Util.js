@@ -1,7 +1,7 @@
 var Util = new function() {
 	var self = this;
 
-	self.asMap = funtion(aArray, aFunction) {
+	self.asMap = function(aArray, aFunction) {
 		var retval = {};
 
 		aArray.forEach(function(aValue) {

@@ -3,6 +3,26 @@ var Matchers = (function() {
 		return true;
 	});
 
+	function matcher(aMatcher) {
+		return {
+			match: aMatcher
+		};
+	}
+
+	function terminal(aMatcher) {
+		return {
+			terminal: true,
+			match: aMatcher
+		};
+	}
+
+	function chain(aMatcher) {
+		return {
+			next: MATCHER_TRUE,
+			match: aMatcher
+		};
+	}
+
 	function isInRange(aChar, aRanges) {
 		for (var i = 0; i < aRanges.length; ++i) {
 			var range = aRanges[i];
@@ -20,25 +40,11 @@ var Matchers = (function() {
 	}
 
 	return {
-		matcher: function(aMatcher) {
-			return {
-				match: aMatcher
-			};
-		},
+		matcher: matcher,
 
-		terminal: function(aMatcher) {
-			return {
-				terminal: true,
-				match: aMatcher
-			};
-		},
+		terminal: terminal,
 
-		chain: function(aMatcher) {
-			return {
-				next: MATCHER_TRUE,
-				match: aMatcher
-			};
-		},
+		chain: chain,
 
 		alternation: function(aFirst, aSecond) {
 			return Matchers.chain(function(aState) {

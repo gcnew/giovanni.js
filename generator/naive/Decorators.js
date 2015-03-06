@@ -65,7 +65,7 @@ var Decorators = (function() {
 				}
 
 				var data = collect(aState.stack, aState.stack.length - sz);
-				aState.stack.push(new Node(aType, data.attributes, data.children);
+				aState.stack.push(new Node(aType, data.attributes, data.children));
 
 				return true;
 			});

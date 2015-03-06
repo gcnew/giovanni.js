@@ -129,7 +129,7 @@ function GrammarParser() {
 
 		if (expect(TokenType.IDENTIFIER)) {
 			var retval = new Node('Reference', null, {
-				'value', mToken.value
+				'value': mToken.value
 			});
 
 			advance();
@@ -225,7 +225,7 @@ function GrammarParser() {
 				break;
 			}
 
-			chars + = c;
+			chars += c;
 		}
 
 		if (!chars.length && !ranges.length) {
@@ -254,7 +254,7 @@ function GrammarParser() {
 	function advance() {
 		advance0();
 
-		if (expect(TokenType.SYNTAX, '@') {
+		if (expect(TokenType.SYNTAX, '@')) {
 			advance0();
 
 			var system = expect(TokenType.SYNTAX, '@');
