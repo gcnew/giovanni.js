@@ -1,3 +1,13 @@
+/*global Util, ParsingException, Parser, MatcherState, Decorators, Matchers*/
+/*exported TokenType*/
+
+// import util/Util
+// import exception/ParsingException
+// import generator/Parser
+// import generator/naive/MatcherState
+// import generator/naive/Decorators
+// import generator/naive/Matchers
+
 function NaiveVisitor() {
 	this.start = null;
 	this.rules = {};
@@ -7,16 +17,16 @@ function NaiveVisitor() {
 
 Util.extend(NaiveVisitor.prototype, {
 	getParser: function(aRuleName) {
-		var rule = this.rules[aRuleName || this.start];
+		var start = this.rules[aRuleName || this.start];
 
-		if (!rule) {
+		if (!start) {
 			throw this.error('Rule "{}" not found', aRuleName);
 		}
 
 		return new Parser(function(aSource) {
 			var state = new MatcherState(aSource);
 
-			if (!mStart.match(state)) {
+			if (!start.match(state)) {
 				throw this.error('Parsing failed');
 			}
 
@@ -89,7 +99,7 @@ Util.extend(NaiveVisitor.prototype, {
 
 			if (first.next) {
 				// if chain
-				first.next = second;
+				first.next = node;
 				node = first;
 			} else {
 				node = Matchers.sequence(first, node);
@@ -143,7 +153,7 @@ Util.extend(NaiveVisitor.prototype, {
 	},
 
 	leaveNameDecorator: function(aNode) {
-		this.stack.push(Decorator.name(
+		this.stack.push(Decorators.name(
 			aNode.getChild('name'),
 			this.stack.pop()
 		));

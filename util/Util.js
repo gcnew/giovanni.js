@@ -1,3 +1,5 @@
+/*exported Util*/
+
 var Util = new function() {
 	var self = this;
 
@@ -8,7 +10,7 @@ var Util = new function() {
 			retval[aValue] = aFunction(aValue);
 		});
 
-		return retval
+		return retval;
 	};
 
 	self.asSet = function(aArray) {

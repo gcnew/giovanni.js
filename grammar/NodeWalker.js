@@ -1,8 +1,12 @@
+/*globals Util*/
+
+// import util/Util
+
 function NodeWalker(aVisitor) {
 	this.cache = {};
 
 	this.visitor = aVisitor;
-};
+}
 
 NodeWalker.traverse = function(aNode, aVisitor) {
 	new NodeWalker(aVisitor).traverse(aNode);
@@ -14,7 +18,7 @@ NodeWalker.prototype.visitChild = function(aChild) {
 	if (aChild.length) {
 		aChild.forEach(this.traverse, this);
 	} else {
-		traverse(aChild);
+		this.traverse(aChild);
 	}
 };
 
@@ -36,7 +40,7 @@ NodeWalker.prototype.handles = function(aType) {
 			leave: this.visitor['leave' + aType] || Util.noop
 		};
 
-		cache[aType] = handles;
+		this.cache[aType] = handles;
 	}
 
 	return handles;

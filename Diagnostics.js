@@ -1,3 +1,5 @@
+/*exported Diagnostics*/
+
 var Diagnostics = {
 	tokenenize_eof_reached: 'EOF Reached',
 	tokenize_illegal_ungetch: 'Illegal call to ungetChar',

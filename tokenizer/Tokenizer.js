@@ -1,3 +1,12 @@
+/*globals Diagnostics, Token, TokenType, SourcePosition, Util, ParsingException*/
+
+// import Diagnostics
+// import tokenizer/Token
+// import tokenizer/TokenType
+// import tokenizer/SourcePosition
+// import util/Util
+// import exception/ParsingException
+
 function Tokenizer() {
 	var self = this;
 
@@ -89,7 +98,7 @@ function Tokenizer() {
 				break;
 		}
 
-		if (isDigit(c)) {
+		if (Tokenizer.isDigit(c)) {
 			return parseNumber();
 		}
 
@@ -99,13 +108,13 @@ function Tokenizer() {
 	function parseIdentifier() {
 		var firstChar = nextChar();
 
-		if (!(isLetter(firstChar) || (firstChar === '_'))) {
+		if (!(Tokenizer.isLetter(firstChar) || (firstChar === '_'))) {
 			throw error(Diagnostics.tokenize_invalid_identifier_char);
 		}
 
 		do {
 			nextChar();
-		} while (!isAtEnd() && isIdentifierChar(mSource[mIndex]));
+		} while (!isAtEnd() && Tokenizer.isIdentifierChar(mSource[mIndex]));
 
 		return new Token(TokenType.IDENTIFIER, tokenString(), tokenPosition());
 	}
@@ -113,7 +122,7 @@ function Tokenizer() {
 	function parseNumber() {
 		do {
 			nextChar();
-		} while (!isAtEnd() && isDigit(mSource[mIndex]));
+		} while (!isAtEnd() && Tokenizer.isDigit(mSource[mIndex]));
 
 		return new Token(TokenType.INT, tokenString(), tokenPosition());
 	}
@@ -125,7 +134,7 @@ function Tokenizer() {
 		var lastIndex = mIndex;
 		do {
 			if (isAtEnd()) {
-				throw error("Unexpected EOF");
+				throw error('Unexpected EOF');
 			}
 
 			var c = nextChar();
@@ -174,7 +183,7 @@ function Tokenizer() {
 			retval = '\n';
 		}
 
-		if (retval == '\n') {
+		if (retval === '\n') {
 			++mLine;
 			mColumn = 0;
 		}
@@ -190,11 +199,13 @@ function Tokenizer() {
 		return (mIndex + (aOffset || 0)) >= mSource.length;
 	}
 
+	/*
 	function advance(aCount) {
 		for (var i = 0; i < aCount; ++i) {
 			nextChar();
 		}
 	}
+	*/
 
 	function tokenStart() {
 		mTokenLine = mLine;
@@ -203,7 +214,7 @@ function Tokenizer() {
 	}
 
 	function tokenPosition() {
-		return new SourcePosition(mTokenIndex, mIndex, mTokenLine, mTokenChar);
+		return new SourcePosition(mTokenIndex, mIndex, mTokenLine, mTokenColumn);
 	}
 
 	function tokenString() {
@@ -213,10 +224,10 @@ function Tokenizer() {
 	function msg(/*aMessage , ..aArgs */) {
 		var message = Util.format.apply(null, arguments);
 
-		return Util.format("{}:{} {}", mTokenLine, mTokenChar, message);
+		return Util.format('{}:{} {}', mTokenLine, mTokenColumn, message);
 	}
 
-	function error(aMessage/*, ..aArgs*/) {
+	function error(/*aMessage, ..aArgs*/) {
 		return new ParsingException(msg.apply(null, arguments));
 	}
 }
@@ -230,7 +241,7 @@ Tokenizer.isLetter = function(aChar) {
 };
 
 Tokenizer.isIdentifierChar = function(aChar) {
-	return isLetter(aChar) || isDigit(aChar) || (aChar == '_');
+	return Tokenizer.isLetter(aChar) || Tokenizer.isDigit(aChar) || (aChar === '_');
 };
 
 Tokenizer.isWhiteSpace = function(aChar) {

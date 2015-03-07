@@ -1,15 +1,23 @@
-function GrammarParser() {
+/*global Util, Tokenizer, TokenType, ParsingException*/
+/*exported TokenType*/
+
+// import util/Util
+// import tokenizer/Tokenizer
+// import tokenizer/TokenType
+// import exception/ParsingException
+
+function GrammarParser(aSource) {
 	var mToken;
 	var mAttrs = {};
 	var mExpectedAttrs = GrammarParser.RULE_ATTRIBUTES;
 
 	var mTokenizer = new Tokenizer(aSource);
 
-	function parse() {
+	this.parse = function() {
 		advance();
 
 		return parseGrammar();
-	}
+	};
 
 	function parseGrammar() {
 		var rules = [];
@@ -86,7 +94,7 @@ function GrammarParser() {
 			throw new Error('never');
 		} */
 
-		attrs = consumeAttributes();
+		var attrs = consumeAttributes();
 		return new Node('Sequence', attrs.system, {
 			body: nodes,
 			attributes: attrs.user
@@ -174,7 +182,7 @@ function GrammarParser() {
 			});
 		}
 
-		throw error("Invalid Primary token: {}", mToken);
+		throw error('Invalid Primary token: {}', mToken);
 	}
 
 	function parseCharClass() {
@@ -267,7 +275,7 @@ function GrammarParser() {
 
 			var name = t.value;
 			if (system && !mExpectedAttrs[name]) {
-				throw erro('Invalid system attribute @@{}', name);
+				throw error('Invalid system attribute @@{}', name);
 			}
 
 			var idx = system ? 'system' : 'user';
@@ -316,7 +324,7 @@ function GrammarParser() {
 }
 
 GrammarParser.parse = function(aSource) {
-	return new GrammerParser(aSource).parse();
+	return new GrammarParser(aSource).parse();
 };
 
 GrammarParser.RULE_ATTRIBUTES = Util.asSet([ 'start', 'nobox' ]);

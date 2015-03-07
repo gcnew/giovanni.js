@@ -1,9 +1,10 @@
-var Decorators = (function() {
+/*globals Util, Matchers*/
+/*exported Decorators*/
 
-	var TYPE_MAP = {
-		child: 'children',
-		attributes: 'attributes'
-	};
+// import util/Util
+// import generator/naive/Matchers
+
+var Decorators = (function() {
 
 	function collect(aStack, aCount) {
 		var children = {};
@@ -53,7 +54,7 @@ var Decorators = (function() {
 				aState.stack.push({
 					type: 'child',
 					name: aName,
-					value: aValue
+					value: value
 				});
 
 				return true;

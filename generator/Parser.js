@@ -1,3 +1,7 @@
+/*global Util*/
+
+// import util/Util
+
 function Parser(aParserFunction) {
 	this.parse = aParserFunction;
 }
