@@ -71,7 +71,7 @@ function parseSource(aSource) {
 		var val = (m[1] || m[2] || '').trim();
 
 		var subVals = val
-			.split(/\r\n|\n|\r/g)
+			.split(/(?:\r\n|\n|\r)\s*/g)
 			.filter(isTruthy);
 
 		if (!subVals.length || !isDirective(subVals[0])) {
