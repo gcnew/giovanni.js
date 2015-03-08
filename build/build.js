@@ -213,21 +213,21 @@ function parse(aFileName) {
 	var mainImport = 'import ' + aFileName.replace(/\.js$/i, '');
 	var next = DIRECTIVE_PARSERS.import(mainImport);
 	for (; next; next = dependencyManager.nextUnresolved()) {
-		var contens = readFile(next.path);
+		var contents = readFile(next.path);
 
-		if (!contens) {
+		if (!contents) {
 			// TODO: issue an error
 			// resolve dependency
 			dependencyManager.add(next.path, 'Error: File not found', []);
 			continue;
 		}
 
-		if (next.type === 'resoucre') {
-			dependencyManager.add(next.path, contens, []);
+		if (next.type === 'resource') {
+			dependencyManager.add(next.path, contents, []);
 			continue;
 		}
 
-		var sourceInfo = parseSource(contens);
+		var sourceInfo = parseSource(contents);
 		var dependencies = parseDependencies(sourceInfo.directives);
 
 		dependencyManager.add(next.path, sourceInfo.source, dependencies);
