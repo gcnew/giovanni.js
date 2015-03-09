@@ -61,14 +61,14 @@ var OptionsParser = (function() {
 
 				retval[optionName] = options.hasValue[optionName]
 					? (arg[alias.length] === '=')
-						? arg.substr(alias.length + 1)	// immediated (prefixed) value
+						? arg.substr(alias.length + 1)	// immediate (prefixed) value
 						: aArguments[++i]				// next (following) value
 					: true;
 			} else {
-				// handle positional argumens
+				// handle positional arguments
 				var optionName;
 
-				// skip already taken filled positional arguments
+				// skip already taken positions
 				do {
 					optionName = options.alias2name['$' + idx++];
 				} while (optionName && (optionName in retval));
