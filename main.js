@@ -18,7 +18,7 @@ function test(aGrammar, aRule, aInput) {
 	}
 
 	var visitor = new NaiveVisitor();
-	var grammar = GrammarParser.parse(aGrammer);
+	var grammar = GrammarParser.parse(aGrammar);
 	var parser = NodeWalker.traverse(grammar, visitor).getParser();
 
 	return parser.recognize(aInput);
