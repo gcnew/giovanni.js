@@ -25,14 +25,13 @@ function test(aGrammar, aRule, aInput) {
 }
 
 function main() {
-	try {
-		assertTrue(test(simple_gvn, "start", "123 + 234"));
-		assertTrue(test("('a'|'b')*'aabb'", "aabb"));
-		assertTrue(test("('a'|'b')+'aabb'", "baabb"));
-		assertTrue(test("('aab'|'aabb')'c'", "aabbc"));
-		assertTrue(test("[a-z0-9._%+\\-]+'@'[a-z0-9.\\-]+'.'[a-z]+", "testov.user+dev@gmail.com"));
-		assertTrue(test(giovanni_gvn, "Literal", "'this is a \\'kitty' and a division\\\\"));
-	} catch (e) {
-		console.error(e);
-	}
+	assertTrue(test(simple_gvn, "start", "123 + 234"));
+	assertTrue(test("('a'|'b')*'aabb'", "aabb"));
+	assertTrue(test("('a'|'b')+'aabb'", "baabb"));
+	assertTrue(test("('aab'|'aabb')'c'", "aabbc"));
+	assertTrue(test("[a-z0-9._%+\\-]+'@'[a-z0-9.\\-]+'.'[a-z]+", "testov.user+dev@gmail.com"));
+	assertTrue(test(giovanni_gvn, "Literal", "'this is a \\'kitty' and a division\\\\"));
+
+	// holy moly
+	// assertTrue("S; S: 'x' S 'x' | 'x';", "xxxxxx");
 }
