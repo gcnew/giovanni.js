@@ -1,0 +1,20 @@
+{
+	"name": "giovanni",
+	"version": "0.0.1",
+	"license": "MIT",
+	"description": "Giovanni.js is a JavaScript port of Giovanni - an experimental extensible AST generator",
+	"keywords": [ "ast", "generator" ],
+	"author": {
+		"name": "gcnew"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/gcnew/giovanni.js.git"
+	},
+	"dependencies": {
+	},
+	"devDependencies": {
+		"bedrock-build": "gcnew/bedrock.build"
+	},
+	"private": true
+}
