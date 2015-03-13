@@ -36,8 +36,8 @@ NodeWalker.prototype.handles = function(aType) {
 
 	if (!handles) {
 		handles = {
-			visit: this.visitor['visit' + aType] || Util.noop,
-			leave: this.visitor['leave' + aType] || Util.noop
+			visit: this.visitor['visit' + aType] || this.visitor['visit'] || Util.noop,
+			leave: this.visitor['leave' + aType] || this.visitor['leave'] || Util.noop
 		};
 
 		this.cache[aType] = handles;
