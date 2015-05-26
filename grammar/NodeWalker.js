@@ -1,6 +1,6 @@
 /*globals Util*/
-
 // import util/Util
+// import grammar/Node
 
 function NodeWalker(aVisitor) {
 	this.cache = {};
@@ -14,19 +14,23 @@ NodeWalker.traverse = function(aNode, aVisitor) {
 	return aVisitor;
 };
 
-NodeWalker.prototype.visitChild = function(aChild) {
-	if (aChild.length) {
-		aChild.forEach(this.traverse, this);
-	} else {
-		this.traverse(aChild);
-	}
-};
-
 NodeWalker.prototype.traverse = function(aNode) {
 	var handles = this.handles(aNode.type);
 
 	handles.visit.call(this.visitor, aNode);
-	aNode.children.forEach(this.visitChild, this);
+	for (var key in aNode.children) {
+		var child = aNode.children[key];
+
+		if (Array.isArray(child)) {
+			child.forEach(this.traverse, this);
+			continue;
+		}
+
+		if (child instanceof Node) {
+			this.traverse(child);
+			continue;
+		}
+	}
 
 	handles.leave.call(this.visitor, aNode);
 };

@@ -2,6 +2,7 @@
 /*exported Decorators*/
 
 // import util/Util
+// import grammar/Node
 // import generator/naive/Matchers
 
 var Decorators = (function() {
@@ -12,6 +13,11 @@ var Decorators = (function() {
 
 		for (var i = aCount; i > 0; --i) {
 			var val = aStack.pop();
+
+			// TODO: children should be array
+			if (val instanceof Node) {
+				children[val.type] = val;
+			}
 
 			if (val.type === 'child') {
 				children[val.name] = val.value;	

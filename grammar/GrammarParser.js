@@ -2,6 +2,7 @@
 /*exported TokenType*/
 
 // import util/Util
+// import grammar/Node
 // import tokenizer/Tokenizer
 // import tokenizer/TokenType
 // import exception/ParsingException
@@ -28,7 +29,7 @@ function GrammarParser(aSource) {
 			mExpectedAttrs = GrammarParser.RULE_ATTRIBUTES;
 			consumeAttributes();
 
-			consume(TokenType.SYNTAX, ';');
+			consume(TokenType.SYMBOL, ';');
 		}
 
 		return new Node('Grammar', null, { rules: rules });
@@ -42,7 +43,7 @@ function GrammarParser(aSource) {
 		mExpectedAttrs = GrammarParser.BODY_ATTRIBUTES;
 		var attrs = consumeAttributes();
 
-		consume(TokenType.SYNTAX, ':');
+		consume(TokenType.SYMBOL, ':');
 		var body = parseAlternation();
 
 		return new Node('Rule', attrs.system, {
@@ -55,11 +56,11 @@ function GrammarParser(aSource) {
 	function parseAlternation() {
 		var left = parseSequence();
 
-		if (!expect(TokenType.SYNTAX, '|')) {
+		if (!expect(TokenType.SYMBOL, '|')) {
 			return left;
 		}
 
-		consume(TokenType.SYNTAX, '|');
+		consume(TokenType.SYMBOL, '|');
 
 		var right = parseAlternation();
 		return new Node('Alternation', null, {
@@ -72,15 +73,15 @@ function GrammarParser(aSource) {
 		var nodes = [];
 
 		while (true) {
-			if (expect(TokenType.SYNTAX, ';')) {
+			if (expect(TokenType.SYMBOL, ';')) {
 				break;
 			}
 
-			if (expect(TokenType.SYNTAX, '|')) {
+			if (expect(TokenType.SYMBOL, '|')) {
 				break;
 			}
 
-			if (expect(TokenType.SYNTAX, ')')) {
+			if (expect(TokenType.SYMBOL, ')')) {
 				break;
 			}
 
@@ -94,6 +95,10 @@ function GrammarParser(aSource) {
 			throw new Error('never');
 		} */
 
+		if (nodes.length == 1) {
+			return nodes[0];
+		}
+
 		var attrs = consumeAttributes();
 		return new Node('Sequence', attrs.system, {
 			body: nodes,
@@ -104,7 +109,7 @@ function GrammarParser(aSource) {
 	function parseRepetition() {
 		var left = parsePrimary();
 
-		if (expect(TokenType.SYNTAX)) {
+		if (expect(TokenType.SYMBOL)) {
 			switch (mToken.value) {
 				case '*':
 				case '+':
@@ -144,23 +149,23 @@ function GrammarParser(aSource) {
 			return retval;
 		}
 
-		if (expect(TokenType.SYNTAX, '[')) {
+		if (expect(TokenType.SYMBOL, '[')) {
 			return parseCharClass();
 		}
 
-		if (expect(TokenType.SYNTAX, '.')) {
+		if (expect(TokenType.SYMBOL, '.')) {
 			advance();
 			return new Node('Any');
 		}
 
-		if (expect(TokenType.SYNTAX, '(')) {
+		if (expect(TokenType.SYMBOL, '(')) {
 			// save the accuumulated attributes
 			var attrs = consumeAttributes();
 
 			advance();
 
 			var name = null;
-			if (expect(TokenType.SYNTAX, '#')) {
+			if (expect(TokenType.SYMBOL, '%')) {
 				advance();
 				name = mToken.value;
 				consume(TokenType.IDENTIFIER);
@@ -171,7 +176,7 @@ function GrammarParser(aSource) {
 			// restore attributes
 			restoreAttributes(attrs);
 
-			consume(TokenType.SYNTAX, ')');
+			consume(TokenType.SYMBOL, ')');
 			if (name === null) {
 				return left;
 			}
@@ -207,7 +212,7 @@ function GrammarParser(aSource) {
 				chars = chars.substring(0, chars.length - 1);
 
 				var end = mTokenizer.getChar();
-				if (!chars.length || end === ']' || end === '-') {
+				if (!start.length || end === ']' || end === '-') {
 					// TODO: better line/char info
 					throw error('Invalid char range');
 				}
@@ -262,26 +267,22 @@ function GrammarParser(aSource) {
 	function advance() {
 		advance0();
 
-		if (expect(TokenType.SYNTAX, '@')) {
+		if (expect(TokenType.SYMBOL, '#') || expect(TokenType.SYMBOL, '@')) {
+			var system = mToken.value === '#';
+
 			advance0();
 
-			var system = expect(TokenType.SYNTAX, '@');
-			if (system) {
-				advance0();
+			var name = mToken.value;
+			if (system && !mExpectedAttrs[name]) {
+				throw error('Invalid system attribute #{}', name);
 			}
-			
-			var t = mToken;
+
 			consume(TokenType.IDENTIFIER);
 
-			var name = t.value;
-			if (system && !mExpectedAttrs[name]) {
-				throw error('Invalid system attribute @@{}', name);
-			}
-
 			var idx = system ? 'system' : 'user';
-			var obj = mAttrs[idx] || [];
+			var obj = mAttrs[idx] || {};
 
-			obj.push(name);
+			obj[name] = true;
 			mAttrs[idx] = obj;
 		}
 	}
@@ -305,7 +306,7 @@ function GrammarParser(aSource) {
 
 	function consume(aType, aValue) {
 		if (!expect(aType, aValue)) {
-			throw error('Expected "{}:{}" but found: {}', aType, aValue, mToken);
+			throw error('Expected "{} {}" but found: {}', aType, aValue, mToken);
 		}
 
 		advance();

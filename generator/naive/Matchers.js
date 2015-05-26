@@ -19,7 +19,10 @@ var Matchers = (function() {
 	function chain(aMatcher) {
 		return {
 			next: MATCHER_TRUE,
-			match: aMatcher
+			match: aMatcher,
+			get terminal() {
+				return this.match.terminal;
+			}
 		};
 	}
 
@@ -27,7 +30,8 @@ var Matchers = (function() {
 		for (var i = 0; i < aRanges.length; ++i) {
 			var range = aRanges[i];
 
-			if (aChar >= range.from && aChar <= range.to) {
+			// TODO: use getChild?
+			if (aChar >= range.children.from && aChar <= range.children.to) {
 				return true;
 			}
 		}
@@ -102,7 +106,7 @@ var Matchers = (function() {
 
 		literal: function(aLiteral) {
 			return Matchers.terminal(function(aState) {
-				if (aState.source.indexOf(aLiteral, aState.offset) < 0) {
+				if (aState.source.indexOf(aLiteral, aState.offset) != aState.offset) {
 					return false;
 				}
 

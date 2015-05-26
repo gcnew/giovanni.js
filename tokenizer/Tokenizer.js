@@ -44,15 +44,17 @@ function Tokenizer() {
 	// Grammar Tokenizer
 
 	self.hasNext = (function(super_hasNext) {
-		while (super_hasNext()) {
-			if (!(isCharAtOffset(0, '/') && isCharAtOffset(1, '/'))) {
-				return true;
-			}
+		return function() {
+			while (super_hasNext()) {
+				if (!(isCharAtOffset(0, '/') && isCharAtOffset(1, '/'))) {
+					return true;
+				}
 
-			while (!isAtEnd() || nextChar() !== '\n') {
-				// skip comments
+				while (!isAtEnd() && nextChar() !== '\n') {
+					// skip comments
+				}
 			}
-		}
+		};
 	})(self.hasNext);
 
 	self.getChar = function() {
@@ -90,8 +92,9 @@ function Tokenizer() {
 			case '@':
 			case '.':
 			case '#':
+			case '%':
 				nextChar();
-				return new Token(TokenType.SYNTAX, tokenString(), tokenPosition());
+				return new Token(TokenType.SYMBOL, tokenString(), tokenPosition());
 			case '\'':
 				return parseLiteral();
 			default:
@@ -112,9 +115,9 @@ function Tokenizer() {
 			throw error(Diagnostics.tokenize_invalid_identifier_char);
 		}
 
-		do {
+		while (!isAtEnd() && Tokenizer.isIdentifierChar(mSource[mIndex])) {
 			nextChar();
-		} while (!isAtEnd() && Tokenizer.isIdentifierChar(mSource[mIndex]));
+		}
 
 		return new Token(TokenType.IDENTIFIER, tokenString(), tokenPosition());
 	}
@@ -192,7 +195,7 @@ function Tokenizer() {
 	}
 
 	function isCharAtOffset(aOffset, aChar) {
-		return mSource[aOffset] === aChar;
+		return mSource[mIndex + aOffset] === aChar;
 	}
 
 	function isAtEnd(aOffset) {

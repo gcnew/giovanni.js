@@ -8,6 +8,8 @@
 // resource simple_gvn: data/simple.gvn
 // resource giovanni_gvn: data/giovanni.gvn
 
+// export ()
+
 var assertTrue = Util.assert;
 
 function test(aGrammar, aRule, aInput) {
@@ -35,3 +37,5 @@ function main() {
 	// holy moly
 	// assertTrue("S; S: 'x' S 'x' | 'x';", "xxxxxx");
 }
+
+main();

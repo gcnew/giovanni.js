@@ -27,7 +27,7 @@ Util.extend(NaiveVisitor.prototype, {
 			var state = new MatcherState(aSource);
 
 			if (!start.match(state)) {
-				throw this.error('Parsing failed');
+				throw new ParsingException('Parsing failed');
 			}
 
 			Util.assert(state.stack.length === 1);
@@ -50,7 +50,7 @@ Util.extend(NaiveVisitor.prototype, {
 			}
 
 			aRef.matcher.reference = rule;
-		});
+		}, this);
 
 		this.references = null;
 	},

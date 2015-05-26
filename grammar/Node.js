@@ -11,9 +11,10 @@ Node.prototype.getChild = function(aName) {
 };
 
 Node.prototype.getAttribute = function(aName) {
-	return this.attributes[aName];
+	return this.attributes && this.attributes[aName];
 };
 
 Node.prototype.setAttribute = function(aName, aValue) {
+	this.attributes = this.attributes || {};
 	this.attributes[aName] = aValue;
 };
