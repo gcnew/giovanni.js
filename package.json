@@ -14,6 +14,7 @@
 	"dependencies": {
 	},
 	"devDependencies": {
+		"chokidar": "1.0.x",
 		"bedrock-build": "gcnew/bedrock.build"
 	},
 	"private": true

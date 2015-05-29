@@ -1,0 +1,57 @@
+var chokidar = require('chokidar');
+var spawn = require('child_process').spawn;
+
+var watcher = chokidar.watch('.', {
+	persistent: true,
+	ignoreInitial: true,
+	ignored: /(?:^|[^\w])(?:node_modules|(?:bin(?:$|[^\w]))|\.\w+)/
+});
+
+var BUILDER_PATH = 'node_modules/.bin/bedrock-build';
+
+var inBuild = false;
+var rebuild = false;
+function build() {
+	if (inBuild) {
+		rebuild = true;
+		return;
+	}
+
+	var builderPath = BUILDER_PATH;
+	if (/^win/i.test(require('os').platform())) {
+		buidlerPath = builderPath.replace(/\//g, '\\\\') + '.cmd';
+	}
+
+	var builder = spawn(buidlerPath, [
+		'main.js',
+		'bin/main.js'
+	]);
+
+	inBuild = true;
+
+	builder.stdout.pipe(process.stdout);
+	builder.stderr.pipe(process.stdout);
+
+	builder.on('exit', function() {
+		inBuild = false;
+
+		if (rebuild) {
+			rebuild = false;
+			build();
+		}
+	});
+}
+
+watcher
+	.on('all', function(aAction, aPath) {
+		if (inBuild) {
+			console.log('Rebuild:', aAction, '::', aPath);
+		}
+
+		build();
+	})
+	.on('error', function(aError) {
+		console.log(':: ERROR:', aError);
+	});
+
+build();
