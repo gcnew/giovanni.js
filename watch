@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 var chokidar = require('chokidar');
 var spawn = require('child_process').spawn;
 
