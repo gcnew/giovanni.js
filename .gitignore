@@ -1,1 +1,4 @@
 node_modules
+bin/
+! bin/inclCompile.js
+! index.templ.html

@@ -24,10 +24,7 @@ function build() {
 		buidlerPath = builderPath.replace(/\//g, '\\\\') + '.cmd';
 	}
 
-	var builder = spawn(buidlerPath, [
-		'main.js',
-		'bin/main.js'
-	]);
+	var builder = spawn(buidlerPath, 'main.js bin/main.js -c bin/inclCompile.js'.split(' '));
 
 	inBuild = true;
 
