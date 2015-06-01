@@ -29,6 +29,11 @@ var Util = new function() {
 		var args = self.slice(arguments);
 
 		args.forEach(function(aValue) {
+			// skip null/undefined/falsy
+			if (!aValue) {
+				return;
+			}
+
 			for (var k in aValue) {
 				aObject[k] = aValue[k];
 			}
@@ -69,3 +74,7 @@ var Util = new function() {
 		self.assert(false, aMessage);
 	};
 };
+
+// 	function indent(aObject) {
+//		return aObject.toString().replace(/\r?\n/g, '$&\t');
+//	}

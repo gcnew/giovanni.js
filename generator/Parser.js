@@ -8,10 +8,10 @@ function Parser(aParserFunction) {
 
 Util.extend(Parser.prototype, {
 	recognize: function(aSource) {
-		try {
+		//try {
 			return !!this.parse(aSource);
-		} catch (ignored) {
-			return false;
-		}
+		//} catch (ignored) {
+		//	return false;
+		//}
 	}
 });

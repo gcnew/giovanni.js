@@ -5,8 +5,18 @@
 // import exception/ParsingException
 // import generator/Parser
 // import generator/naive/MatcherState
-// import generator/naive/Decorators
-// import generator/naive/Matchers
+
+// import generator/naive/matchers/AlternationMatcher
+// import generator/naive/matchers/AnyMatcher
+// import generator/naive/matchers/SequenceMatcher
+// import generator/naive/matchers/RepetitionMatcher
+// import generator/naive/matchers/LiteralMatcher
+// import generator/naive/matchers/ReferenceMatcher
+// import generator/naive/matchers/CharClassMatcher
+
+// import generator/naive/decorators/TypeDecorator
+// import generator/naive/decorators/NameDecorator
+// import generator/naive/decorators/AttributesDecorator
 
 function NaiveVisitor() {
 	this.start = null;
@@ -74,11 +84,11 @@ Util.extend(NaiveVisitor.prototype, {
 		var attrs = aNode.getChild('attributes');
 
 		if (attrs) {
-			rule = Decorators.attributes(attrs, rule);
+			rule = new AttributesDecorator(attrs, rule);
 		}
 
 		if (!aNode.getAttribute('nobox')) {
-			rule = Decorators.type(name, rule);
+			rule = new TypeDecorator(name, rule);
 		}
 
 		this.rules[name] = rule;
@@ -87,7 +97,7 @@ Util.extend(NaiveVisitor.prototype, {
 	leaveAlternation: function() {
 		var second = this.stack.pop();
 
-		this.stack.push(Matchers.alternation(this.stack.pop(), second));
+		this.stack.push(new AlternationMatcher(this.stack.pop(), second));
 	},
 
 	leaveSequence: function(aNode) {
@@ -102,7 +112,7 @@ Util.extend(NaiveVisitor.prototype, {
 				first.next = node;
 				node = first;
 			} else {
-				node = Matchers.sequence(first, node);
+				node = new SequenceMatcher(first, node);
 			}
 		}
 
@@ -119,7 +129,7 @@ Util.extend(NaiveVisitor.prototype, {
 
 		Util.assertf(bounds, 'Unexpected operator: {}', operator);
 
-		this.stack.push(Matchers.repetition(
+		this.stack.push(new RepetitionMatcher(
 			bounds.min,
 			bounds.max,
 			this.stack.pop()
@@ -127,15 +137,15 @@ Util.extend(NaiveVisitor.prototype, {
 	},
 
 	visitLiteral: function(aNode) {
-		this.stack.push(Matchers.literal(aNode.getChild('value')));
+		this.stack.push(new LiteralMatcher(aNode.getChild('value')));
 	},
 
 	visitAny: function() {
-		this.stack.push(Matchers.any());
+		this.stack.push(new AnyMatcher());
 	},
 
 	visitReference: function(aNode) {
-		var ref = Matchers.reference();
+		var ref = new ReferenceMatcher();
 
 		this.stack.push(ref);
 		this.references.push({
@@ -145,7 +155,7 @@ Util.extend(NaiveVisitor.prototype, {
 	},
 
 	visitCharClass: function(aNode) {
-		this.stack.push(Matchers.charClass(
+		this.stack.push(new CharClassMatcher(
 			aNode.getChild('invert'),
 			aNode.getChild('chars'),
 			aNode.getChild('ranges')
@@ -153,7 +163,7 @@ Util.extend(NaiveVisitor.prototype, {
 	},
 
 	leaveNameDecorator: function(aNode) {
-		this.stack.push(Decorators.name(
+		this.stack.push(new NameDecorator(
 			aNode.getChild('name'),
 			this.stack.pop()
 		));

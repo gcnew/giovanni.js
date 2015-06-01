@@ -10,6 +10,12 @@ Node.prototype.getChild = function(aName) {
 	return this.children[aName];
 };
 
+Node.prototype.getChildren = function(aName) {
+	if (aName in this.children) {
+		return this.children[aName];
+	}
+};
+
 Node.prototype.getAttribute = function(aName) {
 	return this.attributes && this.attributes[aName];
 };
