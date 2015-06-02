@@ -20,6 +20,7 @@ Decorator.prototype.collect = function collect(aStack, aCount) {
 		// TODO: children should be array
 		if (val instanceof Node) {
 			children[val.type] = val;
+			continue;
 		}
 
 		if (val.type === 'child') {

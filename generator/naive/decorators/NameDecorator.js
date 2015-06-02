@@ -17,7 +17,7 @@ NameDecorator.prototype.match = function(aState) {
 	}
 
 	var value;
-	if (this.matcher.terminal) {
+	if (this.matcher.isTerminal()) {
 		value = aState.source.substring(offset, aState.offset);
 	} else {
 		value = aState.stack.pop();

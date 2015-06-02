@@ -6,4 +6,5 @@ function ChainMatcher() {
 }
 
 ChainMatcher.prototype = Object.create(Matcher.prototype);
+
 ChainMatcher.prototype.next = TerminalMatcher.MATCHER_TRUE;

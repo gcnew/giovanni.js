@@ -5,7 +5,10 @@ function TerminalMatcher() {
 }
 
 TerminalMatcher.prototype = Object.create(Matcher.prototype);
-TerminalMatcher.prototype.terminal = true;
+
+TerminalMatcher.prototype.isTerminal = function() {
+	return true;
+};
 
 TerminalMatcher.MATCHER_TRUE = (function() {
 	var retval = new TerminalMatcher();
@@ -13,6 +16,6 @@ TerminalMatcher.MATCHER_TRUE = (function() {
 	retval.match = function() {
 		return true;
 	};
-	
+
 	return retval;
 })();

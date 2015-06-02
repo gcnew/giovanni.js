@@ -203,7 +203,7 @@ function GrammarParser(aSource) {
 			var c = mTokenizer.getChar();
 
 			if (c === '\\') {
-				chars += c;
+				chars += mTokenizer.getChar();
 				continue;
 			}
 

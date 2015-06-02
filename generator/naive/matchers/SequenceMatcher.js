@@ -20,6 +20,11 @@ SequenceMatcher.prototype.match = function(aState) {
 	return true;
 };
 
+SequenceMatcher.prototype.isTerminal = function() {
+	// TODO: we have a problem here
+	return this.left.isTerminal() && this.right.isTerminal();
+};
+
 SequenceMatcher.prototype.toString = function() {
 	return '[Sequence\n' +
 		'\tleft: ' + indent(this.left) +

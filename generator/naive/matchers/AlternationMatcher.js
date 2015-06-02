@@ -8,6 +8,7 @@ function AlternationMatcher(aLeft, aRight) {
 }
 
 AlternationMatcher.prototype = Object.create(ChainMatcher.prototype);
+
 AlternationMatcher.prototype.match = function(aState) {
 	var offset = aState.offset;
 
@@ -28,6 +29,11 @@ AlternationMatcher.prototype.match = function(aState) {
 	}
 
 	return false;
+};
+
+AlternationMatcher.prototype.isTerminal = function() {
+	// TODO: we have a problem here
+	return this.left.isTerminal() && this.right.isTerminal();
 };
 
 AlternationMatcher.prototype.toString = function() {

@@ -15,19 +15,19 @@ var assertTrue = Util.assert;
 function test(aGrammar, aRule, aInput) {
 	if (aInput == null) {
 		return test(
-			'#start start: ' + aGrammar + ';', 'start',	aInput
+			'#start start: ' + aGrammar + ';', 'start', aRule
 		);
 	}
 
 	var visitor = new NaiveVisitor();
 	var grammar = GrammarParser.parse(aGrammar);
-	var parser = NodeWalker.traverse(grammar, visitor).getParser();
+	var parser = NodeWalker.traverse(grammar, visitor).getParser(aRule);
 
 	return parser.recognize(aInput);
 }
 
 function main() {
-	assertTrue(test(simple_gvn, "start", "123 + 234"));
+	assertTrue(test(simple_gvn, null, "123 + 234"));
 	assertTrue(test("('a'|'b')*'aabb'", "aabb"));
 	assertTrue(test("('a'|'b')+'aabb'", "baabb"));
 	assertTrue(test("('aab'|'aabb')'c'", "aabbc"));

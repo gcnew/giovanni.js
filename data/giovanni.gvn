@@ -1,6 +1,4 @@
-start: Grammar;
-
-Grammar: Rule+;
+#start Grammar: Rule+;
 
 Identifier: [a-z_][a-z0-9_]*;
 

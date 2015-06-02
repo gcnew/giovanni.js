@@ -45,6 +45,10 @@ RepetitionMatcher.prototype.match = function(aState) {
 	}
 };
 
+RepetitionMatcher.prototype.isTerminal = function() {
+	return this.matcher.isTerminal();
+};
+
 RepetitionMatcher.prototype.toString = function() {
 	return '[Repetition ' + this.min + '~' + this.max +
 		'\n\tmatcher: ' + indent(this.matcher) + '\n' +
